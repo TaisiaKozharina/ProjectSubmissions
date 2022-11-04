@@ -21,13 +21,39 @@ app.get("/allpers", async (req: Request, res: Response) => {
     });
 });
 
+app.get("/pers/:id", async (req: Request, res: Response) => {
+  const persID: number = Number(req.params.id);
+  personModel.findPerson(persID, (err: Error, person: IPerson) => {
+    if (err) {
+      return res.status(500).json({"message": err.message});
+    }
+    res.status(200).json({"data": person});
+  })
+});
+
+app.post("/addpers", async (req: Request, res: Response) => {
+  // const fname: string = req.params.fname;
+  // const lname: string = req.params.lname;
+  // const dob: Date = new Date(req.params.dob);
+  // const country: string = req.params.country;
+  // const address: string = req.params.address;
+  // const email: string = req.params.email;
+  // const phone: string = req.params.phone;
+  // const password: string = req.params.password;
+  const person: IPerson = req.body;
+  console.log(person);
+  personModel.createPerson(person, (err: Error, persID: number) => {
+    if (err) {
+      return res.status(500).json({"message": err.message});
+    }
+    res.status(200).json({"persID": persID});
+  })
+});
+
 //declare route paths
 app.get("/", (req:Request, res:Response) => {
     res.send({message:"IT WORKS"})
 });
-
-
-console.log("Yay it works");
 
 
 const port:string|undefined = process.env.PORT;

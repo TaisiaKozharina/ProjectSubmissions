@@ -1,5 +1,24 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import bcrypt from "bcrypt";
+import axios from "axios";
+
+type PersonData = {
+    id: number,
+    fname: string,
+    lname: string,
+    dob: Date,
+    country: string,
+    address: string,
+    email: string,
+    phone: string,
+    password: string
+}
+
+type Persons = {
+    data: PersonData[]
+}
+
 
 export default function Register() {
     const [fname, setFName] = useState('');
@@ -15,6 +34,8 @@ export default function Register() {
 
     const [validForm, setValidForm] = useState(false);
 
+    
+
     useEffect(()=>{
         if(validForm) navigate("/home");
         else{
@@ -23,39 +44,83 @@ export default function Register() {
         }
     }, [validForm])
 
-    // const register = () => {
+    async function getPersons() {
+        try {
+            const {data, status} = await axios.get<Persons>('http://localhost:8080/allpers');
+            console.log(JSON.stringify(data, null, 4));
+            console.log('response status is: ', status);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.log('error message: ', error.message);
+                return error.message;
+              } else {
+                console.log('unexpected error: ', error);
+                return 'An unexpected error occurred';
+              }
+        }
+
+        // if(email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) && pass.length >= 6){
+        //     console.log(pass);
+        //     const hashPass = bcrypt
+        //     //const hashPass = bcrypt.hashSync(pass, 10);
+        //     console.log(hashPass);
+        //     axios.post('http://localhost:3001/create',
+        //         {
+        //             fname: fname,
+        //             lname: lname,
+        //             dob: dob,
+        //             country: country,
+        //             address: address,
+        //             email: email,
+        //             phone: phone,
+        //             pass: hashPass
+        //         }
+        //     ).then(() => { console.log("Successful save"); })
+        //     setValidForm(true);
+        // }
+        // else{
+        //     setValidForm(false);
+        // }
+
+
+        
+    }
+
+    getPersons();
+
+    // async function addPerson() {
     //     if(email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) && pass.length >= 6){
     //         console.log(pass);
-    //         const hashPass = bcrypt.hashSync(pass, 10);
-    //         console.log(hashPass);
-    //         Axios.post('http://localhost:3001/create',
-    //             {
-    //                 fname: fname,
-    //                 lname: lname,
-    //                 dob: dob,
-    //                 country: country,
-    //                 address: address,
-    //                 email: email,
-    //                 phone: phone,
-    //                 pass: hashPass
-    //             }
-    //         ).then(() => { console.log("Successful save"); })
-    //         setValidForm(true);
-    //     }
-    //     else{
-    //         setValidForm(false);
+    //          const hashPass = bcrypt.hashSync(pass, 10);
+    //          console.log(hashPass);
+
+    //          try {
+    //             const {data, status} = await axios.post<Persons>('http://localhost:8080/addpers',
+    //                 {
+    //                     fname: fname,
+    //                     lname: lname,
+    //                     dob: dob,
+    //                     country: country,
+    //                     address: address,
+    //                     email: email,
+    //                     phone: phone,
+    //                     pass: hashPass
+    //                 }
+    //             );
+    //             console.log(JSON.stringify(data, null, 4));
+    //             console.log('response status is: ', status);
+    //         } catch (error) {
+    //             if (axios.isAxiosError(error)) {
+    //                 console.log('error message: ', error.message);
+    //                 return error.message;
+    //               } else {
+    //                 console.log('unexpected error: ', error);
+    //                 return 'An unexpected error occurred';
+    //               }
+    //         }
     //     }
 
         
-    // }
-
-    // const getPersons = () => {
-    //     console.log("GetPersons");
-    //     Axios.get('http://localhost:3001/getpersons').then((response) => { 
-    //         setPersons(response.data);
-    //         console.log(response.data);
-    //     });
-    //     console.log(persons);
     // }
 
     return (
@@ -95,13 +160,15 @@ export default function Register() {
             <input type='password' onChange={(e) => setPass(e.target.value)} />
             <br />
 
-            {/* <button onClick={register}>Register</button>
-
+            {/* <button onClick={addPerson}>Register</button> */}
+{/* 
             <button onClick={getPersons}>Show Persons</button>
 
             {persons.map((val, key) => {
                 return <div key={key}>{val.pers_fname}</div>
             })} */}
+
+            <button onClick={() => getPersons()}>API Call</button>
 
         </div>
     );
