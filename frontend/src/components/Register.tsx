@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import bcrypt from "bcrypt";
+
 import axios from "axios";
 
+
 type PersonData = {
-    id: number,
+    id?: number,
     fname: string,
     lname: string,
     dob: Date,
@@ -58,70 +59,41 @@ export default function Register() {
                 return 'An unexpected error occurred';
               }
         }
-
-        // if(email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) && pass.length >= 6){
-        //     console.log(pass);
-        //     const hashPass = bcrypt
-        //     //const hashPass = bcrypt.hashSync(pass, 10);
-        //     console.log(hashPass);
-        //     axios.post('http://localhost:3001/create',
-        //         {
-        //             fname: fname,
-        //             lname: lname,
-        //             dob: dob,
-        //             country: country,
-        //             address: address,
-        //             email: email,
-        //             phone: phone,
-        //             pass: hashPass
-        //         }
-        //     ).then(() => { console.log("Successful save"); })
-        //     setValidForm(true);
-        // }
-        // else{
-        //     setValidForm(false);
-        // }
-
-
-        
     }
 
-    getPersons();
-
-    // async function addPerson() {
-    //     if(email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) && pass.length >= 6){
-    //         console.log(pass);
-    //          const hashPass = bcrypt.hashSync(pass, 10);
-    //          console.log(hashPass);
-
-    //          try {
-    //             const {data, status} = await axios.post<Persons>('http://localhost:8080/addpers',
-    //                 {
-    //                     fname: fname,
-    //                     lname: lname,
-    //                     dob: dob,
-    //                     country: country,
-    //                     address: address,
-    //                     email: email,
-    //                     phone: phone,
-    //                     pass: hashPass
-    //                 }
-    //             );
-    //             console.log(JSON.stringify(data, null, 4));
-    //             console.log('response status is: ', status);
-    //         } catch (error) {
-    //             if (axios.isAxiosError(error)) {
-    //                 console.log('error message: ', error.message);
-    //                 return error.message;
-    //               } else {
-    //                 console.log('unexpected error: ', error);
-    //                 return 'An unexpected error occurred';
-    //               }
-    //         }
-    //     }
-
-        
-    // }
+    async function addPerson(){
+        console.log("Clicked register");
+        if(email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) && pass.length >= 6){
+            try {
+                console.log("Entered try block");
+                const {data, status} = await axios.post<PersonData>('http://localhost:8080/addpers',
+                    {
+                        fname: fname,
+                        lname: lname,
+                        dob: dob,
+                        country: country,
+                        address: address,
+                        email: email,
+                        phone: phone,
+                        pass: pass
+                    }
+                );
+                console.log(JSON.stringify(data, null, 4));
+                console.log('response status is: ', status);
+            } catch (error) {
+                if (axios.isAxiosError(error)) {
+                    console.log('error message: ', error.message);
+                    return error.message;
+                    } else {
+                    console.log('unexpected error: ', error);
+                    return 'An unexpected error occurred';
+                    }
+            }
+        }
+        else{
+            console.log("Error in input, smth does not match requirements")
+        }
+    }
 
     return (
         <div className="">
@@ -160,7 +132,7 @@ export default function Register() {
             <input type='password' onChange={(e) => setPass(e.target.value)} />
             <br />
 
-            {/* <button onClick={addPerson}>Register</button> */}
+            <button onClick={() => addPerson()}>Register</button>
 {/* 
             <button onClick={getPersons}>Show Persons</button>
 

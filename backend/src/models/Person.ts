@@ -1,5 +1,5 @@
 export interface IPerson {
-	id: number,
+	id?: number,
     fname?: string,
     lname?: string,
     dob?: Date,
@@ -9,3 +9,14 @@ export interface IPerson {
     phone?: string,
     password?: string
 }
+
+// interface PersonDto {
+//     fname: string,
+//     lname: string,
+//     dob: string,
+//     country: string,
+//     address: string,
+//     email: string,
+//     phone: string,
+//     password: string,
+//   }

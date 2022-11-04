@@ -64,3 +64,16 @@ export const findPerson = (personId: number, callback: Function) => {
       callback(null, person);
     });
 }
+
+export const findPassByEmail = (personEmail: string, callback: Function) => {
+  const q = `SELECT pers_password FROM projectsubmissiondb.Person WHERE pers_email=? `
+  connection.query(q, personEmail, (err, result) => {
+    if (err) {callback(err)}
+    
+    const row = (<RowDataPacket> result)[0];
+    const pass: any =  {
+      password: row.pers_password 
+    }
+    callback(null, pass);
+  });
+}

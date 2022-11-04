@@ -1,4 +1,28 @@
+import axios from "axios";
 import { useNavigate } from "react-router-dom"
+
+const emailTemp: string = 'test666@test.com'
+async function login() {
+    try {
+        const {data, status} = await axios.get<string>('http://localhost:8080/getpass',
+        {
+            params: {
+                email: emailTemp
+            }
+        }
+        );
+        console.log(JSON.stringify(data, null, 4));
+        console.log('response status is: ', status);
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log('error message: ', error.message);
+            return error.message;
+          } else {
+            console.log('unexpected error: ', error);
+            return 'An unexpected error occurred';
+          }
+    }
+}
 
 export default function Login() {
     const navigate = useNavigate();
@@ -13,7 +37,8 @@ export default function Login() {
                 <input type='password'/>
                 <br />
 
-                <button onClick={()=>navigate('/profile')}>Login</button>
+                <button onClick={()=>login()}>Login</button>
+                <button onClick={()=>navigate('/profile')}>To profile</button>
         </>
 
     )
