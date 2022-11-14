@@ -71,9 +71,12 @@ export const findPassByEmail = (personEmail: string, callback: Function) => {
     if (err) {callback(err)}
     
     const row = (<RowDataPacket> result)[0];
-    const pass: any =  {
-      password: row.pers_password 
+    console.log(row);
+    let pass: string = 'nope';
+    if (row){
+      pass = row.pers_password;
     }
+    
     callback(null, pass);
   });
 }

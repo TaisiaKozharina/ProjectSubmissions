@@ -46,15 +46,31 @@ app.get("/pers/:id", async (req: Request, res: Response) => {
   })
 });
 
-app.get("/getpass/:email", async (req: Request, res: Response) => {
-  const persEmail: string = req.params.email;
-  console.log(persEmail);
+app.get("/getpass", async (req: Request, res: Response) => {
+  const persEmail: string = String(req.query.email);
+  const persPass: string = String(req.query.pass);
+  console.log('Received param: '+ persEmail);
   personModel.findPassByEmail(persEmail, (err: Error, pass: string) => {
     if (err) {
       return res.status(500).json({ "message": err.message });
     }
-    res.status(200).json({ "data": pass });
+    //res.status(200).json({ "pass": pass });
+    else{
+      bcrypt.compare(persPass, pass, function (err, match) {
+        if(err) res.status(500).json({ "message": err.message });
+        else if (match){
+          console.log('Passwords match!');
+          res.status(200).json({ "success": true });
+        }
+        else if (!match){
+          console.log('Passwords do not match!');
+          res.status(200).json({ "success": false });
+        }
+      })
+
+    }
   })
+  
 });
 
 
