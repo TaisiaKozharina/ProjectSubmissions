@@ -5,7 +5,7 @@ import { IPerson } from "../models/Person"
 const router:Router = Router();
 
 export const createPerson = (person: IPerson, callback: Function) => {
-    const q = "INSERT INTO Person (pers_fname, pers_lname, pers_dob, pers_country, pers_address, pers_email, pers_phone, pers_password) VALUES(?,?,?,?,?,?,?,?)"
+    const q = "INSERT INTO Person (pers_fname, pers_lname, pers_dob, pers_country, pers_address, pers_email, pers_phone, pers_password, role_id) VALUES(?,?,?,?,?,?,?,?,1)"
     connection.query(
       q,
       [person.fname, person.lname, person.dob, person.country, person.address, person.email, person.phone, person.password],
@@ -77,7 +77,7 @@ export const findPassByEmail = (personEmail: string, callback: Function) => {
       email: '',
       fname: '',
       lname: '',
-      role: ''
+      role: 0
       
     }
     if (row){

@@ -80,6 +80,9 @@ export default function Register() {
                 );
                 console.log(JSON.stringify(data, null, 4));
                 console.log('response status is: ', status);
+                if(status == 200){
+                    navigate('/login');
+                }
             } catch (error) {
                 if (axios.isAxiosError(error)) {
                     console.log('error message: ', error.message);

@@ -1,0 +1,23 @@
+.header{
+    padding: 2vh 0;
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+  }
+  
+  .links{
+    display: flex;
+    flex-direction: row;
+    padding-left: 5vw;
+  }
+  
+  .links a{
+    color: antiquewhite;
+    text-decoration: none;
+    padding-left: 10vw;
+  }
+  
+  .links a:hover{
+    color: rgb(255, 193, 193);
+    text-decoration: none;
+    padding-left: 10vw;
+  }

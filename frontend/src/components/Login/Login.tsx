@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login, logout, userSlice, UserState } from "../State/User";
+import { login, logout, userSlice, UserState } from "../../State/User";
 
 export default function Login() {
     const [email, setEmail] = useState('');

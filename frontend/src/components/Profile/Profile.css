@@ -1,0 +1,18 @@
+.profile{
+    display: grid;
+    grid-template-rows: 1fr 3fr 3fr;
+    width: 100%;
+    background-color: rgba(240, 248, 255, 0.221);
+    align-items: center;
+    justify-content: center;
+}
+
+img{
+    height: 10vh;
+    width: auto;
+}
+
+.pers-info{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}

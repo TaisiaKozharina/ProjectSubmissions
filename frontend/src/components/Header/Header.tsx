@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { logout, UserState } from "../State/User";
+import { logout, UserState } from "../../State/User";
+import './Header.css';
 
 export default function Header() {
     const navigate = useNavigate();

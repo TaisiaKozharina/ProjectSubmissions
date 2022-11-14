@@ -1,12 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import './App.css';
-import Home from './components/Home';
-import About from './components/About';
-import Login from './components/Login';
-import Header from './components/Header';
-import Register from './components/Register';
-import Profile from './components/Profile';
+import Home from './components/Home/Home';
+import About from './components/About/About';
+import Login from './components/Login/Login';
+import Header from './components/Header/Header';
+import Register from './components/Register/Register';
+import Profile from './components/Profile/Profile';
 
 
 

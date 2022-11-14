@@ -11,10 +11,10 @@ export interface UserState {
 }
 
 export const enum Role {
-    Guest = 0,
-    User = 1,
+    GUEST = 0,
+    USER = 1,
     CEO = 2,
-    Admin = 3,
+    ADMIN = 3
 }
 
 const initialState: UserState = {
@@ -22,7 +22,7 @@ const initialState: UserState = {
     email: '',
     fname: '',
     lname: '',
-    role: Role.Guest
+    role: Role.GUEST
 }
 
 export const userSlice = createSlice({
