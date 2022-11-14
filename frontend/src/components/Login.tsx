@@ -1,11 +1,15 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { login, logout, userSlice, UserState } from "../State/User";
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
 
     function handleEmail(event: React.FormEvent<HTMLInputElement>) {   
         let target = event.target as HTMLInputElement; 
@@ -21,7 +25,7 @@ export default function Login() {
         console.log("Pass changed to: "+ pass);
     }, [email, pass])
 
-    async function login() {
+    async function authorize() {
         try {
             console.log('API call');
             const {data, status} = await axios.get('http://localhost:8080/getpass'
@@ -32,11 +36,14 @@ export default function Login() {
                 }
             }
             );
-            console.log(JSON.stringify(data, null, 4));
+            //console.log(JSON.stringify(data, null));
             console.log('Response status: '+status);
             const success = data.success;
             if(success){
-                navigate('/profile');
+                let user = data.person as UserState;
+                console.log(user);
+                dispatch(login(user));
+                navigate("/profile");
             }
             else{
                 setPass('');
@@ -66,7 +73,7 @@ export default function Login() {
                 <input type='password'value={pass} onChange={handlePass}/>
                 <br />
 
-                <button onClick={()=>login()}>Login</button>
+                <button onClick={()=>authorize()}>Login</button>
                 <button onClick={()=>navigate('/profile')}>To profile</button>
         </>
 

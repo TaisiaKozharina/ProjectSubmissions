@@ -66,17 +66,32 @@ export const findPerson = (personId: number, callback: Function) => {
 }
 
 export const findPassByEmail = (personEmail: string, callback: Function) => {
-  const q = `SELECT pers_password FROM projectsubmissiondb.Person WHERE pers_email=? `
+  const q = `SELECT pers_id, pers_password, pers_fname, pers_lname, role_id  FROM projectsubmissiondb.Person WHERE pers_email=? `
   connection.query(q, personEmail, (err, result) => {
     if (err) {callback(err)}
     
     const row = (<RowDataPacket> result)[0];
-    console.log(row);
-    let pass: string = 'nope';
+    let data = {
+      id: '',
+      pass: '',
+      email: '',
+      fname: '',
+      lname: '',
+      role: ''
+      
+    }
     if (row){
-      pass = row.pers_password;
+      data = {
+        id: row.pers_id,
+        pass: row.pers_password,
+        email: personEmail,
+        fname: row.pers_fname,
+        lname: row.pers_lname,
+        role: row.role_id
+      }
+
     }
     
-    callback(null, pass);
+    callback(null, data);
   });
 }
