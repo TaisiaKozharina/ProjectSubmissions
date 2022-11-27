@@ -6,6 +6,11 @@ import * as bodyParser from "body-parser";
 import "dotenv/config";
 import { IPerson } from './models/Person';
 import * as personModel from './controller/personController';
+import * as teamModel from './controller/teamController';
+import * as topicModel from './controller/topicController';
+import { Role } from './models/Role';
+import { ITopic } from './models/Topic';
+import resolveTree from './service/TopicResolver';
 //const router = express.Router();
 
 const saltround = 10;
@@ -25,14 +30,13 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json()); //json parsing, strigifying
 
-//import routes
 app.get("/allpers", async (req: Request, res: Response) => {
   personModel.findAllPersons((err: Error, persons: IPerson[]) => {
     if (err) {
       return res.status(500).json({ "errorMessage": err.message });
     }
 
-    res.status(200).json({ "data": persons });
+    res.status(200).json({ "persons": persons });
   });
 });
 
@@ -76,8 +80,6 @@ app.get("/getpass", async (req: Request, res: Response) => {
   
 });
 
-
-
 app.post("/addpers", async (req: Request, res: Response) => {
 
   console.log(req.body);
@@ -93,7 +95,8 @@ app.post("/addpers", async (req: Request, res: Response) => {
         address: req.body.address,
         email: req.body.email,
         phone: req.body.phone,
-        password: hash
+        password: hash,
+        role: Role.USER
       }
 
       console.log(person);
@@ -107,11 +110,42 @@ app.post("/addpers", async (req: Request, res: Response) => {
   });
 });
 
-//declare route paths
+app.post("/addtopic", async (req: Request, res: Response) => {
+  topicModel.createTopic(req.body.title, req.body.parent as number, (err: Error, topicID: number) => {
+    if (err) {
+      return res.status(500).json({ "message": err.message });
+    }
+    res.status(200).json({ "topicID": topicID });
+  })
+})
+
+app.post("/addteam", async (req: Request, res: Response) => {
+  teamModel.createTeam(req.body.name, (err: Error, teamID: number) => {
+    if (err) {
+      return res.status(500).json({ "message": err.message });
+    }
+    res.status(200).json({ "teamID": teamID });
+  })
+});
+
+app.get("/alltopics", async (req: Request, res: Response) => {
+  topicModel.findAllTopics((err: Error, topics: ITopic[]) => {
+    if (err) {
+      return res.status(500).json({ "errorMessage": err.message });
+    }
+
+    let baseTopics = topics.filter(x=> x.parent_id===null);
+    baseTopics.forEach(baseTop=>{
+      baseTop.class = 'base';
+      resolveTree(topics, baseTop);
+    });
+    res.status(200).json({ "topics": baseTopics });
+  });
+});
+
 app.get("/", (req: Request, res: Response) => {
   res.send({ message: "IT WORKS" })
 });
-
 
 const port: string | undefined = process.env.PORT;
 

@@ -35,7 +35,9 @@ export const findAllPersons = (callback: Function) => {
             address: row.pers_address, 
             email: row.pers_email, 
             phone: row.pers_phone, 
-            password: row.pers_password
+            password: row.pers_password,
+            role: row.role_id,
+            team_id: row.team_id
           }
           persons.push(person);
         });
@@ -59,7 +61,9 @@ export const findPerson = (personId: number, callback: Function) => {
         address: row.pers_address, 
         email: row.pers_email, 
         phone: row.pers_phone, 
-        password: row.pers_password
+        password: row.pers_password,
+        role: row.role_id,
+        team_id: row.team_id
       }
       callback(null, person);
     });

@@ -24,9 +24,9 @@ export const findAllTopics = (callback: Function) => {
       });
 }
 
-export const createTopic = (topic: ITopic, callback: Function) => {
+export const createTopic = (title: string, parent: number|null, callback: Function) => {
     const q = `INSERT INTO Topic(topic_title, parent_id) VALUES(?,?) `
-    connection.query(q, [topic.title, topic.parent_id], (err, result) => {
+    connection.query(q, [title, parent], (err, result) => {
         if (err) {callback(err)}
         const insertId = (<OkPacket> result).insertId;
         callback(null, insertId);

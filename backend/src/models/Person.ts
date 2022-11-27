@@ -1,13 +1,15 @@
 export interface IPerson {
 	id?: number,
-    fname?: string,
-    lname?: string,
-    dob?: Date,
+    fname: string,
+    lname: string,
+    dob: Date,
     country?: string,
     address?: string,
-    email?: string,
+    email: string,
     phone?: string,
-    password?: string
+    password: string,
+    role: number,
+    team_id?: number
 }
 
 // interface PersonDto {

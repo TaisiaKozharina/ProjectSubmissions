@@ -35,7 +35,8 @@ export const findAllProject = (callback: Function) => {
             funding_motive: row.proj_funding_motivation,
             deadline: row.proj_end_term,
             status: row.proj_status,
-            topic_id: row.topic_id
+            topic_id: row.topic_id,
+            team_id: row.team_id
           }
           projects.push(project);
         });
@@ -58,7 +59,8 @@ export const findProject = (projectId: number, callback: Function) => {
         funding_motive: row.proj_funding_motivation,
         deadline: row.proj_end_term,
         status: row.proj_status,
-        topic_id: row.topic_id
+        topic_id: row.topic_id,
+        team_id: row.team_id
       }
       callback(null, project);
     });
