@@ -15,3 +15,49 @@ img{
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
+
+ul{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#topic-list{
+    display: grid;
+    margin-left: 0;
+}
+
+.list-item{
+    display: grid;
+    grid-template-columns: auto;
+    grid-row: 1fr auto;
+}
+
+.topic-header{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    align-items: center;
+    justify-content:end;
+}
+
+.topic-header>input{
+    background-color: rgb(189, 189, 189);
+}
+
+.topic-header>*{
+    text-align: left;
+}
+
+.base.list-item{
+    color: #ffa6a6;
+}
+
+.middle.list-item{
+    color: #fdd5d5;
+    margin-left: 5vw;
+}
+
+.final.list-item{
+    color: #ffffff;
+    margin-left: 5vw;
+}

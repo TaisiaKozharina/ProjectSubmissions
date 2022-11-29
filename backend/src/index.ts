@@ -117,6 +117,17 @@ app.post("/addtopic", async (req: Request, res: Response) => {
     }
     res.status(200).json({ "topicID": topicID });
   })
+});
+
+app.post("/deletetopic", async (req: Request, res: Response) => {
+  console.log('Request is on bakend');
+  console.log(req.body.id);
+  topicModel.deleteTopic(req.body.id as number, (err: Error) => {
+    if (err) {
+      return res.status(500).json({ "message": err.message });
+    }
+    res.status(200);
+  })
 })
 
 app.post("/addteam", async (req: Request, res: Response) => {

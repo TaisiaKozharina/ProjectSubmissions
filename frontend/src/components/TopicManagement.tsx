@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import {ITopic} from "../../../backend/src/models/Topic";
+import TopicList from "./TopicList";
+
 
 export default function TopicManagement() {
     const [topics, setTopics] = useState<ITopic[]>([])
@@ -17,7 +19,7 @@ export default function TopicManagement() {
         );
         console.log(JSON.stringify(data, null, 4));
         console.log('response status is: ', status);
-        if(status == 200){
+        if(status === 200){
             //refresh
             console.log("Successfully added topic to DB");
         }
@@ -59,13 +61,26 @@ export default function TopicManagement() {
         
         <div>
             <button onClick={()=>getTopics()}>Hack</button>
-            <h2>Manage topics</h2>
+
+
+            <div>Exiting topics:</div>
             <div>
+                <ul id="topic-list">
+                    {Array.from(topics).map((topic)=>(
+                        <TopicList key={topic.id} {...topic}/>
+                    ))}
+                </ul>
+
+                <div>
                 <h4>New category</h4>
                 <label>Category name: </label>
                 <input type="text" id='new_category' required></input>
                 <button onClick={()=>addTopic((document.getElementById('new_category') as HTMLInputElement).value, null)}>Add category</button>
             </div>
+            </div>
+
+            <h2>Manage topics</h2>
+
 
             
             {topics.length>0 &&

@@ -33,4 +33,17 @@ export const createTopic = (title: string, parent: number|null, callback: Functi
       });
 }
 
+export const deleteTopic = (id: number, callback: Function) => {
+  console.log('Request is in controller');
+  console.log(id);
+  const q = `DELETE from Topic where topic_id=?`
+  connection.query(q, [id], (err, result) => {
+      if (err) {callback(err)}
+      console.log(result);
+      callback(null);
+  });
+}
+
+
+
 //TODO: Endpoint for deleting topic + all related topics (Need it al all?)
