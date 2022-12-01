@@ -5,7 +5,6 @@ export interface IProject {
     aim?: string,
     funding?: number,
     funding_motive?: string,
-    deadline?: Date,
     status?: number,
     topic_id?: number,
     team_id?: number

@@ -5,7 +5,7 @@ import TopicList from "./TopicList";
 
 
 export default function TopicManagement() {
-    const [topics, setTopics] = useState<ITopic[]>([])
+    const [topics, setTopics] = useState<ITopic[]>([]);
 
     async function addTopic(title: string, parent: number|null){
         try {

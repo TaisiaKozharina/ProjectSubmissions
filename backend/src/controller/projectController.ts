@@ -4,11 +4,20 @@ import { connection } from ".."
 import { IProject } from "../models/Project";
 const router:Router = Router();
 
-export const createProject = (project: IProject, callback: Function) => {
-    const q = "INSERT INTO Project (proj_id, proj_title, proj_description, proj_aim, proj_funding, proj_funding_motivation, proj_end_term, proj_status, topic_id, team_id) VALUES(?,?,?,?,?,?,?,?,?,?)"
+export const createProject = (project: IProject, teamID:number, callback: Function) => {
+  console.log("IN CONTROLLER");
+  console.log(project);
+  console.log("Team id: "+teamID);
+    const q = "INSERT INTO projectsubmissiondb.Project (proj_title, proj_description, proj_aim, proj_funding, proj_funding_motivation, topic_id, team_id) VALUES(?,?,?,?,?,?,?)"
     connection.query(
       q,
-      [project.title, project.description, project.aim, project.funding, project.funding_motive, project.deadline, project.status, project.topic_id],
+      [ project.title, 
+        project.description, 
+        project.aim, 
+        project.funding, 
+        project.funding_motive, 
+        project.topic_id,
+        teamID],
       (err, result) => {
         if (err) {callback(err)};
         const insertId = (<OkPacket> result).insertId;
@@ -33,7 +42,6 @@ export const findAllProject = (callback: Function) => {
             aim: row.proj_aim,
             funding: row.proj_funding,
             funding_motive: row.proj_funding_motivation,
-            deadline: row.proj_end_term,
             status: row.proj_status,
             topic_id: row.topic_id,
             team_id: row.team_id
@@ -57,7 +65,6 @@ export const findProject = (projectId: number, callback: Function) => {
         aim: row.proj_aim,
         funding: row.proj_funding,
         funding_motive: row.proj_funding_motivation,
-        deadline: row.proj_end_term,
         status: row.proj_status,
         topic_id: row.topic_id,
         team_id: row.team_id

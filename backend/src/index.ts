@@ -8,9 +8,11 @@ import { IPerson } from './models/Person';
 import * as personModel from './controller/personController';
 import * as teamModel from './controller/teamController';
 import * as topicModel from './controller/topicController';
+import * as projectModel from './controller/projectController';
 import { Role } from './models/Role';
 import { ITopic } from './models/Topic';
 import resolveTree from './service/TopicResolver';
+import { IProject } from './models/Project';
 //const router = express.Router();
 
 const saltround = 10;
@@ -131,9 +133,15 @@ app.post("/deletetopic", async (req: Request, res: Response) => {
 })
 
 app.post("/addteam", async (req: Request, res: Response) => {
-  teamModel.createTeam(req.body.name, (err: Error, teamID: number) => {
+  teamModel.createTeam(req.body.name, req.body.leader_id, (err: Error, teamID: number) => {
     if (err) {
       return res.status(500).json({ "message": err.message });
+    }
+    else{
+      teamModel.projectTeamRecord(teamID, req.body.leader_id, (err: Error) => {
+        if (err) {
+          return res.status(500).json({ "message": err.message });
+        }});
     }
     res.status(200).json({ "teamID": teamID });
   })
@@ -153,6 +161,18 @@ app.get("/alltopics", async (req: Request, res: Response) => {
     res.status(200).json({ "topics": baseTopics });
   });
 });
+
+app.post("/addproject", async (req: Request, res: Response) => {
+    projectModel.createProject(req.body.project as IProject, req.body.team_id, (err: Error, projectID: number) => {
+      if (err) {
+        return res.status(500).json({ "message": err.message });
+      }
+      res.status(200).json({ "projectID": projectID });
+    })
+});
+
+
+
 
 app.get("/", (req: Request, res: Response) => {
   res.send({ message: "IT WORKS" })
