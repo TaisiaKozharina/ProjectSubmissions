@@ -171,6 +171,22 @@ app.post("/addproject", async (req: Request, res: Response) => {
     })
 });
 
+app.get("/allprojects", async (req: Request, res: Response) => {
+    const forPers: number = Number(req.query.forPers);
+    console.log('received forePers:'+forPers);
+    if (forPers == -1){
+      //all projects existing
+    }
+    else{
+      projectModel.findProjectPers(forPers, (err: Error, projects: IProject[]) => {
+        if (err) {
+          return res.status(500).json({ "errorMessage": err.message });
+        }
+        res.status(200).json({ "projects": projects });
+      });
+    }
+})
+
 
 
 

@@ -3,7 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 
 export interface UserState {
-    id: string 
+    id: number 
     email: string
     fname: string
     lname: string
@@ -18,7 +18,7 @@ export const enum Role {
 }
 
 const initialState: UserState = {
-    id: '',
+    id: -1,
     email: '',
     fname: '',
     lname: '',

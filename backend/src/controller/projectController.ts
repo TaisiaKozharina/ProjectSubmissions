@@ -44,7 +44,9 @@ export const findAllProject = (callback: Function) => {
             funding_motive: row.proj_funding_motivation,
             status: row.proj_status,
             topic_id: row.topic_id,
-            team_id: row.team_id
+            team_id: row.team_id,
+            createDate: row.proj_createDate,
+            progress: row.proj_progress
           }
           projects.push(project);
         });
@@ -67,18 +69,47 @@ export const findProject = (projectId: number, callback: Function) => {
         funding_motive: row.proj_funding_motivation,
         status: row.proj_status,
         topic_id: row.topic_id,
-        team_id: row.team_id
+        team_id: row.team_id,
+        createDate: row.proj_createDate,
+        progress: row.proj_progress
       }
       callback(null, project);
     });
 }
 
-export const findProjectBySmth = (smth: string, callback: Function) => {
-  const q = `SELECT * FROM projectsubmissiondb.Project WHERE field=? `
-  connection.query(q, smth, (err, result) => {
+export const findProjectPers = (persID: number, callback: Function) => {
+  const q = `SELECT distinct p.proj_id as proj_id, p.proj_title as proj_title, p.proj_description as proj_description, `+
+            `p.proj_aim as proj_aim, p.proj_funding as proj_funding, p.proj_funding_motivation as motivation, `+
+            `p.proj_status as status, p.proj_progress as progress, p.proj_createDate as created, p.team_id as team_id, `+
+            `t.team_name as team_name, t.leader_id as team_leader `+
+            `FROM projectsubmissiondb.Project p  `+
+            `left join projectsubmissiondb.Team t on p.team_id=t.team_id `+
+            `left join projectsubmissiondb.ProjectTeam pt on pt.team_id=t.team_id `+
+            `left join projectsubmissiondb.person pers on pers.pers_id=pt.pers_id `+
+            `where pt.pers_id=? `
+  connection.query(q, [persID], (err, result) => {
     if (err) {callback(err)}
     
-    const row = (<RowDataPacket> result)[0];    
-    callback(null, smth);
-  });
+    const rows = <RowDataPacket[]> result;
+    const projects: IProject[] = [];
+    rows.forEach(row => {
+      const project:IProject =  {
+        id: row.proj_title,
+        title: row.proj_title,
+        description: row.proj_description,
+        aim: row.proj_aim,
+        funding: row.proj_funding,
+        funding_motive: row.motivation,
+        status: row.status,
+        progress: row.progress,
+        topic_id: row.topic_id,
+        team_id: row.team_id,
+        team_name: row.team_name,
+        leader_id: row.team_leader,
+        createDate: row.created
+      }
+      projects.push(project);
+    });
+      callback(null, projects);
+    });
 }

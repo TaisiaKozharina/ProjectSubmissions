@@ -6,6 +6,10 @@ export interface IProject {
     funding?: number,
     funding_motive?: string,
     status?: number,
+    progress: number,
     topic_id?: number,
-    team_id?: number
+    team_id?: number,
+    team_name?: string,
+    leader_id?: number,
+    createDate: Date
 }

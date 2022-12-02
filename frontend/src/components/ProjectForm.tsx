@@ -150,10 +150,6 @@ export default function CreateProject(props: any) {
             <textarea onChange={(e) => handleInputChange(e, 'funding_motive')} />
             <br />
 
-            <label>Set a deadline:</label>
-            <input type="text" onChange={(e) => handleInputChange(e, 'deadline')} />
-            <br />
-
             <button onClick={()=>createProject()}>Create</button>
 
         </div>
