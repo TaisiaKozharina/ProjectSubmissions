@@ -57,3 +57,57 @@ ul{
     color: #ffffff;
     margin-left: 5vw;
 }
+
+.proj-list{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.proj-card{
+    display: grid;
+    align-items: center;
+    background-color: #4901916b;
+    border: 2px solid #4901916b;
+    color: #ffffff;
+    border-radius: 10px;
+    width: 40vw;
+    margin: 10px 10px;
+    transition-duration: 0.2s;
+}
+
+.proj-card:hover{
+    background-color: #490191;
+    border: 2px solid #644880;
+}
+
+.card-header{
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.card-item{
+    display: grid;
+    grid-template-rows: 1fr auto;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed #644880;
+}
+
+.card-item>*{
+    margin: 0 0;
+}
+
+.card-item>h4{
+    text-transform: uppercase;
+    font-style: italic;
+}
+
+.card-footer{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.card-footer>div{
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}

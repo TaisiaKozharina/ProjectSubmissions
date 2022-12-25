@@ -1,7 +1,8 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { IProject } from "../../../../backend/src/models/Project";
+import { ProjStatus } from "../../enums/ProjStatus";
 import { Role, UserState } from "../../State/User";
 import profPic from "../../Static/Prof_Pic0.png";
 import CreateProject from "../ProjectForm";
@@ -16,57 +17,81 @@ type Project = {
     funding?: number,
     funding_motive?: string,
     deadline?: Date,
-    status?: number,
-    topic_id?: number
+    status: number,
+    topic_id?: number,
+    topic_title?: string
+    leader_id?: number
 }
 
 function Project (proj: IProject){
+    const user = useSelector((state)=>state) as UserState;   
+    const [edit, setEdit] = useState(false);
+
     return(
-        <div>
-            <table>
-                <tbody>
-                <tr>
-                    <td>Title</td>
-                    <td>{proj.title}</td>
-                </tr>
-                <tr>
-                    <td>Aim</td>
-                    <td>{proj.aim}</td>
-                </tr>
-                <tr>
-                    <td>Description</td>
-                    <td>{proj.description}</td>
-                </tr>
-                <tr>
-                    <td>Funding</td>
-                    <td>{proj.funding}</td>
-                </tr>
-                <tr>
-                    <td>Funding motive</td>
-                    <td>{proj.funding_motive}</td>
-                </tr>
-                <tr>
-                    <td>Team id</td>
-                    <td>{proj.team_id}</td>
-                </tr>
-                <tr>
-                    <td>Status</td>
-                    <td>{proj.status}</td>
-                </tr>
-                {/* <tr>
-                    <td>Progress</td>
-                    <td>{proj.progress}</td>
-                </tr> */}
-                {/* <tr>
-                    <td>Create at</td>
-                    <td>{new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(proj.createDate)}</td>
-                </tr> */}
-                </tbody>
-            </table>
+        <>
+        {edit===false &&
+            <div className="proj-card">
+            <div className="card-header">
+                <h2>{proj.title}</h2>
+                {user.id === proj.leader_id &&
+                <small>You are the leader!</small>
+                }
+            </div>
+            {/* {proj.createDate.toString()} */}
+            <div className="card-item">
+                <h4>Topic:</h4>
+                <p>{proj.topic_title}</p>             
+            </div>
+
+            <div className="card-item">
+                <h4>Aim:</h4>
+                <p>{proj.aim}</p>
+            </div>
+            
+            <div className="card-item">
+                <h4>Description:</h4>
+                <p>{proj.description}</p>
+            </div>
+            <div className="card-item">
+                <h4>Funding motivation:</h4>
+                <p>{proj.aim}</p>
+            </div>
+            <div className="card-footer">
+                <div>
+                    <h4>Status:</h4>
+                    <p>{ProjStatus[proj.status]}</p>
+                </div>
+                <div>
+                    <h4>Progress:</h4>
+                    <p>{proj.progress} %</p>
+                </div>
+                <div>
+                    <h4>$</h4>
+                    <p>{proj.funding}</p>
+                </div>
+            </div>
+            <div className="btn-panel">
+                {proj.status == ProjStatus.DRAFT &&
+                <>
+                    <button onClick={()=>setEdit(true)}>Edit</button>
+                    <button>Submit for review</button>
+                </>
+                    
+                }
+                {proj.status == ProjStatus.IN_DEVELOPMENT &&
+                    <button>Edit progress</button>
+                }
+
+            </div>
         </div>
+        }
+        {edit===true &&
+            <CreateProject proj={proj} visible={true}/>
+        }
+        </>
+        
     )
 }
-
 
 
 
@@ -87,6 +112,7 @@ const ProfileBody = (user: UserState) =>{
                 console.log('response status is: ', response.status);
                 let raw_projects = Array.from(response.data.projects) as IProject[];
                 console.log(raw_projects);
+                //console.log((raw_projects[0] as IProject).topic_title);
                 setProjects(...projects as [], raw_projects);
             })
     
@@ -107,11 +133,13 @@ const ProfileBody = (user: UserState) =>{
                 <div>
                     <h3>Your projects: </h3>
                     <button onClick={()=>getProjects(user.id as number)}>Load your project</button>
-                    {Array.from(projects).map((project, index)=>(
-                        <Project key={index} {...project}></Project>
-                ))}
+                    <div className="proj-list">
+                        {Array.from(projects).map((project, index)=>(
+                            <Project key={index} {...project}></Project>
+                        ))}
+                    </div>
                     <button id="btn-form" onClick={()=>setShow(true)}>Create project</button>
-                    <CreateProject visible={show}/>
+                    <CreateProject proj={{} as IProject} visible={show}/>
                 </div>
             )
         } 
@@ -120,7 +148,7 @@ const ProfileBody = (user: UserState) =>{
                 <div>
                     <h3>Admin functions: ... </h3>
                 <button>
-                    Explode the server muahaha
+                    Explode the server muahaha 😈
                 </button>
                 </div>
             )

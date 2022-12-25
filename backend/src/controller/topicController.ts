@@ -44,6 +44,17 @@ export const deleteTopic = (id: number, callback: Function) => {
   });
 }
 
+export const getTopicName = (id: number, callback: Function) => {
+  const q = `SELECT topic_title from projectsubmissiondb.Topic where topic_id=? `
+  console.log("IN CONTROLLER. Param: ", id);
+  connection.query(q, id, (err, result) => {
+      if (err) {callback(err)}
+      console.log(result);
+      const row = (<RowDataPacket> result)[0];
+      const title:String = row.topic_title
+      callback(null, title);
+  });
+}
 
 
 //TODO: Endpoint for deleting topic + all related topics (Need it al all?)

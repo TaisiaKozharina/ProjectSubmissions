@@ -13,6 +13,7 @@ import { Role } from './models/Role';
 import { ITopic } from './models/Topic';
 import resolveTree from './service/TopicResolver';
 import { IProject } from './models/Project';
+import { ProjectDTO } from './models/ProjectDTO';
 //const router = express.Router();
 
 const saltround = 10;
@@ -162,6 +163,18 @@ app.get("/alltopics", async (req: Request, res: Response) => {
   });
 });
 
+app.get("/getTopicName", async (req: Request, res: Response) => {
+  const id: number = Number(req.query.topic_id);
+  console.log(req.query.topic_id);
+  topicModel.getTopicName(id, (err: Error, title: String) => {
+    if (err) {
+      return res.status(500).json({ "errorMessage": err.message });
+    }
+    res.status(200).json({ "title": title });
+    console.log(title);
+  });
+});
+
 app.post("/addproject", async (req: Request, res: Response) => {
     projectModel.createProject(req.body.project as IProject, req.body.team_id, (err: Error, projectID: number) => {
       if (err) {
@@ -171,6 +184,16 @@ app.post("/addproject", async (req: Request, res: Response) => {
     })
 });
 
+app.post("/updateproject", async (req: Request, res: Response) => {
+  console.log(req.body.project);
+  projectModel.updateProject(req.body.project as IProject, (err: Error) => {
+    if (err) {
+      return res.status(500).json({ "message": err.message });
+    }
+    res.status(200);
+  })
+});
+
 app.get("/allprojects", async (req: Request, res: Response) => {
     const forPers: number = Number(req.query.forPers);
     console.log('received forePers:'+forPers);
@@ -178,10 +201,11 @@ app.get("/allprojects", async (req: Request, res: Response) => {
       //all projects existing
     }
     else{
-      projectModel.findProjectPers(forPers, (err: Error, projects: IProject[]) => {
+      projectModel.findProjectPers(forPers, (err: Error, projects: ProjectDTO[]) => {
         if (err) {
           return res.status(500).json({ "errorMessage": err.message });
         }
+        
         res.status(200).json({ "projects": projects });
       });
     }
