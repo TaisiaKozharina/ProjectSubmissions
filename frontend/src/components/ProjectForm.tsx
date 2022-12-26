@@ -5,11 +5,13 @@ import {IPerson} from "../../../backend/src/models/Person";
 import { ITopic } from "../../../backend/src/models/Topic";
 import { useSelector } from "react-redux";
 import { UserState } from "../State/User";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateProject(props:any ) {
     const [persons, setPersons] = useState<IPerson[]>([]);
     const [project, setProject] = useState(props.proj as IProject);
     const [topics, setTopics] = useState<ITopic[]>([]);
+    const navigate = useNavigate();
     const user = useSelector((state)=>state) as UserState;
     const update = props.proj.id > 1? true : false;
     console.log(update);
@@ -53,31 +55,39 @@ export default function CreateProject(props:any ) {
     }
 
     async function getTopics() {
+        let topics = {} as ITopic[];
         try {
             await axios.get('http://localhost:8080/alltopics')
             .then((response)=>{
                 //console.log(response);
                 if(response.data.topics.length>0){
-                    let raw_topics = Array.from(response.data.topics) as ITopic[];
-                    console.log(raw_topics);
-                    setTopics(...topics as [], getFinalTopics(raw_topics));
+                    topics = Array.from(response.data.topics) as ITopic[];
+                    console.log(topics);
+                    //setTopics(...topics as [], getFinalTopics(raw_topics));
                 }
             });
         } 
         catch (error) {
             if (axios.isAxiosError(error)) {
                 console.log('error message: ', error.message);
-                return error.message;
+                //return error.message;
               } else {
                 console.log('unexpected error: ', error);
-                return 'An unexpected error occurred';
+                //return 'An unexpected error occurred';
               }
         }
+        finally{
+            return topics;
+        }
     }
+
+    const initializer = () => {getTopics().then(r=>setTopics(...topics as [], getFinalTopics(r)))};
+    useEffect(initializer, []);
 
 
     async function createProject() {
         console.log(update);
+        
         const url2 = update? 'http://localhost:8080/updateproject':'http://localhost:8080/addproject';
 
         try {
@@ -119,7 +129,7 @@ export default function CreateProject(props:any ) {
                 return 'An unexpected error occurred';
             }
         }
-        
+        navigate("/profile");
     }
     
     const handleInputChange = (e:React.FormEvent, prop:string) => {
@@ -133,7 +143,6 @@ export default function CreateProject(props:any ) {
 
     return(
         <>
-        <button onClick={()=>getTopics()}>Hack</button>
         <div style={{ visibility: props.visible? 'visible': 'hidden'}}>
             <div className="proj-card">
                 <div className="card-header">

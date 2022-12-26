@@ -23,6 +23,10 @@ type Project = {
     leader_id?: number
 }
 
+function createCollab(){
+
+}
+
 function Project (proj: IProject){
     const user = useSelector((state)=>state) as UserState;   
     const [edit, setEdit] = useState(false);
@@ -71,15 +75,19 @@ function Project (proj: IProject){
                 </div>
             </div>
             <div className="btn-panel">
-                {proj.status == ProjStatus.DRAFT &&
+                {(proj.status == ProjStatus.DRAFT && user.role == Role.USER)&&
                 <>
                     <button onClick={()=>setEdit(true)}>Edit</button>
                     <button>Submit for review</button>
-                </>
-                    
+                </> 
                 }
+
                 {proj.status == ProjStatus.IN_DEVELOPMENT &&
                     <button>Edit progress</button>
+                }
+
+                {(proj.status != ProjStatus.FINISHED && user.role == Role.USER) &&
+                    <button onClick={()=>createCollab()}>Need help</button>
                 }
 
             </div>
@@ -99,40 +107,49 @@ const ProfileBody = (user: UserState) =>{
     const [show, setShow] = useState(false);
     const [projects, setProjects] = useState<IProject[]>([]);
 
-    async function getProjects(persID: number){
+
+
+
+    async function getProjects() {
+        let pers_id = user.role == Role.USER? user.id : -1;
+        let raw_projects = {} as IProject[];
         try {
             await axios.get('http://localhost:8080/allprojects',
             {
                 params:{
-                    forPers: user.id
+                    forPers: pers_id
                 }
-                
             }).then((response)=>{
                 //console.log(JSON.stringify(response.data, null, 4));
                 console.log('response status is: ', response.status);
-                let raw_projects = Array.from(response.data.projects) as IProject[];
+                raw_projects = Array.from(response.data.projects) as IProject[];
                 console.log(raw_projects);
                 //console.log((raw_projects[0] as IProject).topic_title);
-                setProjects(...projects as [], raw_projects);
+                //setProjects(...projects as [], raw_projects);
             })
     
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 console.log('error message: ', error.message);
-                return error.message;
+                //return error.message;
               } else {
                 console.log('unexpected error: ', error);
-                return 'An unexpected error occurred';
+                //return 'An unexpected error occurred';
               }
+        } finally {
+            return raw_projects
         }
+
     }
+
+    const initializer = () => {getProjects().then(r=>setProjects(...projects as [], r))};
+    useEffect(initializer, []);
 
     switch(user.role){
         case(Role.USER): {
             return(
                 <div>
                     <h3>Your projects: </h3>
-                    <button onClick={()=>getProjects(user.id as number)}>Load your project</button>
                     <div className="proj-list">
                         {Array.from(projects).map((project, index)=>(
                             <Project key={index} {...project}></Project>
@@ -147,9 +164,19 @@ const ProfileBody = (user: UserState) =>{
             return(
                 <div>
                     <h3>Admin functions: ... </h3>
-                <button>
-                    Explode the server muahaha 😈
-                </button>
+
+                    <div>
+                        <h3>All projects: </h3>
+                        <div className="proj-list">
+                            {Array.from(projects).map((project, index)=>(
+                                <Project key={index} {...project}></Project>
+                            ))}
+                        </div>
+                    </div>
+
+                    <button>
+                        Explode the server muahaha 😈
+                    </button>
                 </div>
             )
         } 

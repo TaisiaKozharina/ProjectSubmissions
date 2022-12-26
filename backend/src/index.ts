@@ -198,7 +198,13 @@ app.get("/allprojects", async (req: Request, res: Response) => {
     const forPers: number = Number(req.query.forPers);
     console.log('received forePers:'+forPers);
     if (forPers == -1){
-      //all projects existing
+      projectModel.findAllProjects((err: Error, projects: ProjectDTO[]) => {
+        if (err) {
+          return res.status(500).json({ "errorMessage": err.message });
+        }
+        
+        res.status(200).json({ "projects": projects });
+      });
     }
     else{
       projectModel.findProjectPers(forPers, (err: Error, projects: ProjectDTO[]) => {
