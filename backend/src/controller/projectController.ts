@@ -88,7 +88,9 @@ export const findAllProjects = (callback: Function) => {
 }
 
 export const findProject = (projectId: number, callback: Function) => {
-    const q = 
+    console.log("Controller: findProject(): projectId=",projectId)
+  
+  const q = 
     `SELECT p.proj_id, p.proj_title, p.proj_description, p.proj_aim, p.proj_funding, p.proj_funding_motivation, p.proj_status, `+
     `p.topic_id, p.team_id, p.proj_progress, p.proj_createDate, t.leader_id, tp.topic_title `+
     `from projectsubmissiondb.Project p `+
@@ -156,4 +158,6 @@ export const findProjectPers = (persID: number, callback: Function) => {
     });
       callback(null, projects);
     });
-}
+};
+
+

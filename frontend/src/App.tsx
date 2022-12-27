@@ -7,6 +7,7 @@ import Login from './components/Login/Login';
 import Header from './components/Header/Header';
 import Register from './components/Register/Register';
 import Profile from './components/Profile/Profile';
+import Collabs from './components/Collabs';
 
 
 
@@ -21,6 +22,7 @@ function App() {
           <Route path='login' element={<Login />}/>
           <Route path='register' element={<Register/>}/>
           <Route path='profile' element={<Profile/>}/>
+          <Route path='collabs' element={<Collabs/>}/>
         </Routes>
 
       </Router>

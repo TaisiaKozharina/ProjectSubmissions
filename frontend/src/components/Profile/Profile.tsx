@@ -5,31 +5,52 @@ import { IProject } from "../../../../backend/src/models/Project";
 import { ProjStatus } from "../../enums/ProjStatus";
 import { Role, UserState } from "../../State/User";
 import profPic from "../../Static/Prof_Pic0.png";
-import CreateProject from "../ProjectForm";
-import TopicManagement from "../TopicManagement";
+import CreateProject from "./ProjectForm";
+import TopicManagement from "./TopicManagement";
 import './Profile.css';
+import { createCollab } from "../../api/collab";
+import { getProjects } from "../../api/projects";
 
-type Project = {
-    id?: number,
-    title?: string,
-    description?: string,
-    aim?: string,
-    funding?: number,
-    funding_motive?: string,
-    deadline?: Date,
-    status: number,
-    topic_id?: number,
-    topic_title?: string
-    leader_id?: number
+// type Project = {
+//     id?: number,
+//     title?: string,
+//     description?: string,
+//     aim?: string,
+//     funding?: number,
+//     funding_motive?: string,
+//     deadline?: Date,
+//     status: number,
+//     topic_id?: number,
+//     topic_title?: string
+//     leader_id?: number
+// }
+
+async function submitCollab(proj:IProject){
+        createCollab(proj.id as number, (document.getElementById('collab-desc') as HTMLInputElement).value)
+        document.getElementById('submit-success')!.style.display = "block";
+        await new Promise(resolve => setTimeout(resolve, 3000)); // 3 sec wait
+        closeClick();
+        document.getElementById('submit-success')!.style.display = "none";
+        document.getElementById('submit-success')!.style.display = "none";
+
 }
 
-function createCollab(){
-
+function collabClick(){
+    document.getElementById("collab")!.style.display = "block";
+}
+function closeClick(){
+    document.getElementById("collab")!.style.display = "none";
 }
 
 function Project (proj: IProject){
     const user = useSelector((state)=>state) as UserState;   
     const [edit, setEdit] = useState(false);
+
+    window.onclick = function(event) {
+        if (event.target === document.getElementById("collab")) {
+            document.getElementById("collab")!.style.display = "none";
+        }
+    }
 
     return(
         <>
@@ -87,9 +108,23 @@ function Project (proj: IProject){
                 }
 
                 {(proj.status != ProjStatus.FINISHED && user.role == Role.USER) &&
-                    <button onClick={()=>createCollab()}>Need help</button>
+                    <button onClick={()=>collabClick()}>Need help</button>
                 }
 
+            </div>
+
+            <div id="collab" className="collab-modal">
+                <div className="modal-content">
+                    <span className="close" onClick={()=>closeClick()}>&times;</span>
+
+                    <label htmlFor="collab-desc">Who are you looking for?</label>
+                    <br/>
+                    <textarea id='collab-desc' name="collab-desc"/>
+                    <br/>
+                    <button onClick={()=>submitCollab(proj)}>Save</button>
+                    <br/>
+                    <h4 id='submit-success'> ✅ Project Profile successfully created! You can now see it in "Collaborations" tab!</h4>
+                </div>
             </div>
         </div>
         }
@@ -107,42 +142,7 @@ const ProfileBody = (user: UserState) =>{
     const [show, setShow] = useState(false);
     const [projects, setProjects] = useState<IProject[]>([]);
 
-
-
-
-    async function getProjects() {
-        let pers_id = user.role == Role.USER? user.id : -1;
-        let raw_projects = {} as IProject[];
-        try {
-            await axios.get('http://localhost:8080/allprojects',
-            {
-                params:{
-                    forPers: pers_id
-                }
-            }).then((response)=>{
-                //console.log(JSON.stringify(response.data, null, 4));
-                console.log('response status is: ', response.status);
-                raw_projects = Array.from(response.data.projects) as IProject[];
-                console.log(raw_projects);
-                //console.log((raw_projects[0] as IProject).topic_title);
-                //setProjects(...projects as [], raw_projects);
-            })
-    
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                console.log('error message: ', error.message);
-                //return error.message;
-              } else {
-                console.log('unexpected error: ', error);
-                //return 'An unexpected error occurred';
-              }
-        } finally {
-            return raw_projects
-        }
-
-    }
-
-    const initializer = () => {getProjects().then(r=>setProjects(...projects as [], r))};
+    const initializer = () => {getProjects(user.role === Role.USER? user.id : -1).then(r=>setProjects(...projects as [], r))};
     useEffect(initializer, []);
 
     switch(user.role){
@@ -215,9 +215,6 @@ export default function Profile() {
                     {ProfileBody(user)}
                 </div>
             </div>
-
-
-            
         </>
     )
 }

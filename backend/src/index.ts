@@ -9,11 +9,13 @@ import * as personModel from './controller/personController';
 import * as teamModel from './controller/teamController';
 import * as topicModel from './controller/topicController';
 import * as projectModel from './controller/projectController';
+import * as collabModel from './controller/collaborationsController';
 import { Role } from './models/Role';
 import { ITopic } from './models/Topic';
 import resolveTree from './service/TopicResolver';
 import { IProject } from './models/Project';
 import { ProjectDTO } from './models/ProjectDTO';
+import { IProjectProf } from './models/ProjectProfile';
 //const router = express.Router();
 
 const saltround = 10;
@@ -217,6 +219,34 @@ app.get("/allprojects", async (req: Request, res: Response) => {
     }
 })
 
+app.post("/addprojectprof", async (req: Request, res: Response) => {
+  collabModel.createProjectProfile(req.body.projectID as number, req.body.description as string, (err: Error, profileID: number) => {
+    if (err) {
+      return res.status(500).json({ "message": err.message });
+    }
+    res.status(200).json({ "profileID": profileID });
+  })
+});
+
+app.get("/allprojectprof", async (req: Request, res: Response) => {
+  collabModel.allProjectProfile((err: Error, profiles: IProjectProf[]) => {
+    if (err) {
+      return res.status(500).json({ "message": err.message });
+    }
+    res.status(200).json({ "profiles": profiles });
+  })
+});
+
+app.get("/getproject", async (req: Request, res: Response) => {
+  //console.log("Index.ts: received param:", req.query.projectID )
+  const projID: number = Number(req.query.projectID);
+  projectModel.findProject(projID, (err: Error, project: IProject) => {
+    if (err) {
+      return res.status(500).json({ "message": err.message });
+    }
+    res.status(200).json({ "project": project });
+  })
+});
 
 
 

@@ -18,6 +18,7 @@ export default function Header() {
                 <div><Link to="/about">About</Link></div>
                 <div>{user.id === -1?<Link to="/login">Login</Link>:<Link to='/' onClick={()=>handleLogout()}>Logout</Link>}</div>              
                 <div><Link to="/register">Register</Link></div>
+                <div><Link to="/collabs">Collaborations</Link></div>
                 {/* <div><Link to="/profile">Profile</Link></div>  */}
             </div>
     

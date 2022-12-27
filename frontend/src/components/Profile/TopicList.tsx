@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { ITopic } from "../../../backend/src/models/Topic";
-import { Role, UserState } from "../State/User";
+import { ITopic } from "../../../../backend/src/models/Topic";
+import { Role, UserState } from "../../State/User";
 
 function addFinalTopic(e:React.MouseEvent<HTMLButtonElement>){
     let btn = e.target as HTMLElement;
