@@ -184,6 +184,7 @@ app.post("/addproject", async (req: Request, res: Response) => {
         return res.status(500).json({ "message": err.message });
       }
       res.status(200).json({ "projectID": projectID });
+      console.log("end of index.ts addproject!")
     })
 });
 
@@ -194,6 +195,7 @@ app.post("/updateproject", async (req: Request, res: Response) => {
       return res.status(500).json({ "message": err.message });
     }
     res.status(200);
+    console.log("end of index.ts updateproject!")
   })
 });
 
@@ -277,7 +279,6 @@ app.post("/addcollabrequest", async (req: Request, res: Response) => {
 app.get("/getcollabrequests", async (req: Request, res: Response) => {
 
   const userID: number = Number(req.query.userID);
-  console.log(userID);
   collabModel.getCollabRequests(userID, (err: Error, collabs: CollabRequest[]) => {
     if (err) {
       return res.status(500).json({ "message": err.message });
@@ -289,10 +290,21 @@ app.get("/getcollabrequests", async (req: Request, res: Response) => {
 app.post("/changestatuscollab", async (req: Request, res: Response) => {
   const collabID: number = Number(req.body.collabID);
   const decision: number = Number(req.body.decision);
+  const persID: number = Number(req.body.persID);
+  const teamID: number = Number(req.body.teamID);
 
   collabModel.changeStatus(collabID, decision, (err: Error) => {
     if (err) {
       return res.status(500).json({ "message": err.message });
+    }
+    else{
+      if(decision == 1){
+        teamModel.projectTeamRecord(teamID, persID, (err: Error)=>{
+          if (err) {
+            return res.status(500).json({ "message": err.message });
+          }
+        })
+      }
     }
     res.status(200);
   })

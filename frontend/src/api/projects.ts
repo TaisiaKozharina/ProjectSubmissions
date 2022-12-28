@@ -3,11 +3,12 @@ import { IProject } from "../../../backend/src/models/Project";
 import { Role, UserState } from "../State/User";
 
 export async function createProject(update: boolean, leader: number, project:IProject) {
-    console.log(update);
+    console.log("INSIDE API");
     
     const url2 = update? 'http://localhost:8080/updateproject':'http://localhost:8080/addproject';
 
     try {
+        console.log("INSIDE TRY BLOCK OF API");
         if(!update){
             await axios.post('http://localhost:8080/addteam',
             {
@@ -22,7 +23,7 @@ export async function createProject(update: boolean, leader: number, project:IPr
                    project:project,
                    team_id:newteamID
                 }).then((response)=>{
-                    console.log(JSON.stringify(response.data, null, 4));
+                    //console.log(JSON.stringify(response.data, null, 4));
                     console.log('response status is: ', response.status);
                 });
             });
@@ -32,11 +33,11 @@ export async function createProject(update: boolean, leader: number, project:IPr
                 {
                    project:project,
                 }).then((response)=>{
-                    console.log(JSON.stringify(response.data, null, 4));
+                    //console.log(JSON.stringify(response.data, null, 4));
                     console.log('response status is: ', response.status);
                 });
         }
-        
+        console.log("PROBABLY IN THE PROCESS OF SMTH");
     } catch (error) {
         if (axios.isAxiosError(error)) {
             console.log('error message: ', error.message);
@@ -46,6 +47,11 @@ export async function createProject(update: boolean, leader: number, project:IPr
             //return 'An unexpected error occurred';
         }
     }
+    finally{
+        console.log("IN FINALLY BLOCK OF API");
+        return 0;
+    }
+    
 }
 
 export async function getProjects(pers_id: number): Promise<IProject[]> {

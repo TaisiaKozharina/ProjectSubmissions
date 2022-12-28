@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login, logout, userSlice, UserState } from "../../State/User";
+import { login, UserState } from "../../State/User";
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -27,21 +27,18 @@ export default function Login() {
 
     async function authorize() {
         try {
-            console.log('API call');
-            const {data, status} = await axios.get('http://localhost:8080/getpass'
-            , {
+            const {data, status} = await axios.get('http://localhost:8080/getpass', 
+            {
                 params: {
                     email: email,
                     pass: pass
                 }
-            }
-            );
-            //console.log(JSON.stringify(data, null));
+            });
+
             console.log('Response status: '+status);
             const success = data.success;
             if(success){
                 let user = data.person as UserState;
-                console.log(user);
                 dispatch(login(user));
                 navigate("/profile");
             }

@@ -1,7 +1,5 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {IProject} from "../../../../backend/src/models/Project";
-import {IPerson} from "../../../../backend/src/models/Person";
 import { ITopic } from "../../../../backend/src/models/Topic";
 import { useSelector } from "react-redux";
 import { UserState } from "../../State/User";
@@ -9,39 +7,19 @@ import { useNavigate } from "react-router-dom";
 import { getTopics } from "../../api/topics";
 import { createProject } from "../../api/projects";
 
-export default function CreateProject(props:any ) {
-    //const [persons, setPersons] = useState<IPerson[]>([]);
+export default function CreateProject(props:any) {
     const [project, setProject] = useState(props.proj as IProject);
     const [topics, setTopics] = useState<ITopic[]>([]);
-    const navigate = useNavigate();
     const user = useSelector((state)=>state) as UserState;
-    const update = props.proj.id > 1? true : false;
+    const navigate = useNavigate();
+    let update = props.proj.id > 1? true : false;
+    //const [updateHere, setUpdateHere] = useState(update);
     console.log("Update? ",update);
 
-    useEffect(()=>{
-        console.log(project)
-    }, [project]);
 
-    // async function getUsers() {
-    //     try {
-    //         await axios.get('http://localhost:8080/allpers')
-    //         .then((response)=>{
-    //             let filterUsers = Array.from(response.data.persons) as IPerson[];
-    //             filterUsers = filterUsers.filter(user => user.role===1);
-    //             console.log(filterUsers);
-    //             setPersons(...persons as [], filterUsers);
-    //         });
-    //     } 
-    //     catch (error) {
-    //         if (axios.isAxiosError(error)) {
-    //             console.log('error message: ', error.message);
-    //             return error.message;
-    //           } else {
-    //             console.log('unexpected error: ', error);
-    //             return 'An unexpected error occurred';
-    //           }
-    //     }
-    // }
+    // useEffect(()=>{
+    //     console.log(project)
+    // }, [project]);
 
     function getFinalTopics(topics:ITopic[], finalTopics=[] as ITopic[]){
         topics.forEach(topic=>{
@@ -62,6 +40,15 @@ export default function CreateProject(props:any ) {
         setProject({
           ...project,
           [prop]: (e.target as HTMLInputElement).value
+        })
+    }
+
+    const handleSave = () =>{
+        console.log("THIS IS INSIDE HANDLESAVE()");
+        createProject(update, user.id, project)
+        .then((r)=>{
+            console.log("This is inside @then@")
+            props.setEdit(false)
         })
     }
 
@@ -107,8 +94,15 @@ export default function CreateProject(props:any ) {
                     <h4>Funding motivation:</h4>
                     <textarea value={project.funding_motive} onChange={(e) => handleInputChange(e, 'funding_motive')} />
                 </div>
+
+                {update &&
+                <div className="card-item">
+                    <h4>Progress:</h4>
+                    <input type="range" min="0" max="100" value={project.progress} onChange={(e) => handleInputChange(e, 'progress')} />
+                 </div>
+                }
                 <div className="btn-panel">
-                    <button onClick={()=>{createProject(update, user.id, project); navigate("/profile");}}>Save</button>
+                    <button onClick={()=>{handleSave()}}>Save</button>
                 </div>
             </div>            
         </div>

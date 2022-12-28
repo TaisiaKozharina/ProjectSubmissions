@@ -32,6 +32,7 @@ function closeClick() {
 function Project(proj: IProject) {
     const user = useSelector((state) => state) as UserState;
     const [edit, setEdit] = useState(false);
+    console.log(edit);
 
     window.onclick = function (event) {
         if (event.target === document.getElementById("collab")) {
@@ -116,7 +117,7 @@ function Project(proj: IProject) {
                 </div>
             }
             {edit === true &&
-                <CreateProject proj={proj} visible={true} />
+                <CreateProject setEdit={setEdit} proj={proj} visible={true} />
             }
         </>
 
@@ -138,7 +139,7 @@ function Request(req: CollabRequest) {
                 {req.message}
             </div>
             <div className="req-footer">
-                <button className="accept-btn" onClick={()=>changeStatusCollab(req.id, 1)}>Accept</button>
+                <button className="accept-btn" onClick={()=>changeStatusCollab(req.id, 1, req.pers_id, req.team_id)}>Accept</button>
                 <button className="reject-btn" onClick={()=>changeStatusCollab(req.id, 2)}>Reject</button>
             </div>
         </div>
@@ -157,8 +158,8 @@ const ProfileBody = (user: UserState) => {
     useEffect(initializerProj, []);
     useEffect(initializerCollab, []);
 
-    console.log(projects);
-    console.log(requests);
+    // console.log(projects);
+    // console.log(requests);
 
     switch (user.role) {
         case (Role.USER): {

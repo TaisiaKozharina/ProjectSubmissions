@@ -1,10 +1,6 @@
 import axios from "axios";
 import { CollabRequest } from "../../../backend/src/models/CollabRequest";
-import { IProject } from "../../../backend/src/models/Project";
-//ProjectSubmissions\backend\src\models\ProjectProfile.ts
 import { IProjectProf } from "../../../backend/src/models/ProjectProfile";
-import { getProjectByID } from "./projects";
-
 
 export async function createCollab(projID: number, description: string){
     try {
@@ -13,7 +9,6 @@ export async function createCollab(projID: number, description: string){
             projectID: projID,
             description: description
         }).then((response)=>{
-            //console.log(JSON.stringify(response.data, null, 4));
             console.log('response status is: ', response.status);
             console.log(response.data.profileID);
         })
@@ -21,11 +16,9 @@ export async function createCollab(projID: number, description: string){
     } catch (error) {
         if (axios.isAxiosError(error)) {
             console.log('error message: ', error.message);
-            //return error.message;
-          } else {
-            console.log('unexpected error: ', error);
-            //return 'An unexpected error occurred';
-          }
+        } else {
+        console.log('unexpected error: ', error);
+        }
     }
 }
 
@@ -43,9 +36,9 @@ export async function getCollabs():Promise<IProjectProf[]> {
     } catch (error) {
         if (axios.isAxiosError(error)) {
             console.log('error message: ', error.message);
-          } else {
-            console.log('unexpected error: ', error);
-          }
+        } else {
+        console.log('unexpected error: ', error);
+        }
     } finally {
         return profiles
     }
@@ -98,12 +91,14 @@ export async function getCollabsForProject(userID: number):Promise<CollabRequest
     }
 }
 
-export async function changeStatusCollab(collabID: number, decision: number){
+export async function changeStatusCollab(collabID: number, decision: number, newUserID?:number, teamID?: number){
     try {
         await axios.post('http://localhost:8080/changestatuscollab',
         {
             collabID: collabID,
-            decision: decision
+            decision: decision,
+            persID: newUserID,
+            teamID: teamID
         }).then((response)=>{
             console.log('response status is: ', response.status);
         })

@@ -5,9 +5,6 @@ import { IProject } from "../models/Project";
 const router:Router = Router();
 
 export const createProject = (project: IProject, teamID:number, callback: Function) => {
-  console.log("IN CONTROLLER: create");
-  console.log(project);
-  console.log("Team id: "+teamID);
     const q = "INSERT INTO projectsubmissiondb.Project (proj_title, proj_description, proj_aim, proj_funding, proj_funding_motivation, topic_id, team_id) VALUES(?,?,?,?,?,?,?)"
     connection.query(
       q,
@@ -27,10 +24,8 @@ export const createProject = (project: IProject, teamID:number, callback: Functi
 };
 
 export const updateProject = (project: IProject, callback: Function) => {
-  console.log("IN CONTROLLER: update");
-  //console.log(project);
     const q = `UPDATE projectsubmissiondb.Project SET proj_title=?, proj_description=?, proj_aim=?, `+
-    `proj_funding=?, proj_funding_motivation=? `+
+    `proj_funding=?, proj_funding_motivation=?, proj_progress=? `+
     `WHERE proj_id=?`
     connection.query(
       q,
@@ -39,6 +34,7 @@ export const updateProject = (project: IProject, callback: Function) => {
         project.aim, 
         project.funding, 
         project.funding_motive, 
+        project.progress,
         project.id
       ],
       (err, result) => {
@@ -88,8 +84,6 @@ export const findAllProjects = (callback: Function) => {
 }
 
 export const findProject = (projectId: number, callback: Function) => {
-    console.log("Controller: findProject(): projectId=",projectId)
-  
   const q = 
     `SELECT p.proj_id, p.proj_title, p.proj_description, p.proj_aim, p.proj_funding, p.proj_funding_motivation, p.proj_status, `+
     `p.topic_id, p.team_id, p.proj_progress, p.proj_createDate, t.leader_id, tp.topic_title `+
@@ -162,8 +156,6 @@ export const findProjectPers = (persID: number, callback: Function) => {
 
 
 export const findMembersProject = (projectId: number, callback: Function) => {
-  console.log("Controller: findMembersProject(): projectId=",projectId)
-
 const q = `select distinct pt.pers_id `+
   `from projectsubmissiondb.projectteam pt `+
   `left join projectsubmissiondb.team t on t.team_id = pt.team_id `+
@@ -178,7 +170,6 @@ const q = `select distinct pt.pers_id `+
       members.push(r.pers_id as number);
     })
     callback(null, members);
-    console.log("Final Mebmers (in cotroller):", members);
   });
 }
 

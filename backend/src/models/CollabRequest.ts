@@ -9,5 +9,6 @@ export interface CollabRequest {
     status: RequestStatus;
     pers_id: number;
     pers_name: string;
+    team_id: number;
     //[key: string]: any
 }
