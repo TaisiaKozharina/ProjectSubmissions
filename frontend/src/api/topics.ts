@@ -9,7 +9,6 @@ export async function getTopics():Promise<ITopic[]> {
             //console.log(response);
             if(response.data.topics.length>0){
                 topics = Array.from(response.data.topics) as ITopic[];
-                console.log(topics);
                 //setTopics(...topics as [], getFinalTopics(raw_topics));
             }
         });
@@ -17,12 +16,10 @@ export async function getTopics():Promise<ITopic[]> {
     catch (error) {
         if (axios.isAxiosError(error)) {
             console.log('error message: ', error.message);
-            //return error.message;
-            return {} as ITopic[]
+            //return {} as ITopic[]
           } else {
             console.log('unexpected error: ', error);
-            //return 'An unexpected error occurred';
-            return {} as ITopic[]
+            //return {} as ITopic[]
           }
     }
     finally{

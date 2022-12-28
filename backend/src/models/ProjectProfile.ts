@@ -4,6 +4,6 @@ export interface IProjectProf {
     proj_id: number,
     proj_title: string,
     proj_progress: number,
-    leader_id: number,
-    members: number[]
+    leader_id: number
+    members: number //count of members
 }

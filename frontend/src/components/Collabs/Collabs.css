@@ -1,0 +1,65 @@
+.collab-card{
+    display: grid;
+    grid-template-rows: 1fr auto 1fr;
+    width: 30vw;
+    background: rgba(255, 228, 196, 0.199);
+    border-radius: 30px;
+}
+
+.collab-header{
+    background: rgb(50,4,35);
+    background: linear-gradient(90deg, rgba(50,4,35,1) 0%, rgba(67,11,85,1) 50%, rgba(50,4,35,1) 100%); 
+    color: antiquewhite;
+    padding: 2%;
+    text-transform: uppercase;
+}
+
+.collab-footer{
+    padding: 10% 0;
+}
+
+.collab-modal{
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #ecb9b9;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+  
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#collab-desc{
+    width: 50vw;
+}
+
+#submit-success{
+    display: none;
+    color: #000000;
+    font-style: italic;
+}

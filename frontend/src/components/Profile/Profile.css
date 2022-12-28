@@ -90,7 +90,7 @@ ul{
     display: grid;
     grid-template-rows: 1fr auto;
     margin-bottom: 10px;
-    border-bottom: 1px dashed #644880;
+    border-bottom: 1px dashed #784880d0;
 }
 
 .card-item>*{
@@ -157,3 +157,46 @@ ul{
     color: #000000;
     font-style: italic;
 }
+
+.request-card{
+    display: grid;
+    align-items: center;
+    background-color: #380027d5;
+    border: 2px solid #9b2b796b;
+    color: #ffffff;
+    border-radius: 10px;
+    width: 40vw;
+    margin: 10px 10px;
+    transition-duration: 0.2s;
+}
+    
+.request-card:hover{
+    background-color: #57013de5;
+    border: 2px solid #cc03906b;
+}
+
+.request-header{
+    text-transform: uppercase;
+}
+
+.req-footer{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.req-footer>button{
+    margin: 10px 20px;
+    background-color: #57013de5;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.accept-btn:hover{
+    background-color: #19b707e5;
+}
+
+.reject-btn:hover{
+    background-color: #b70736e5;
+}
+

@@ -161,3 +161,25 @@ export const findProjectPers = (persID: number, callback: Function) => {
 };
 
 
+export const findMembersProject = (projectId: number, callback: Function) => {
+  console.log("Controller: findMembersProject(): projectId=",projectId)
+
+const q = `select distinct pt.pers_id `+
+  `from projectsubmissiondb.projectteam pt `+
+  `left join projectsubmissiondb.team t on t.team_id = pt.team_id `+
+  `left join projectsubmissiondb.project p on p.team_id = t.team_id `+
+  `where p.proj_id=? `
+  connection.query(q, projectId, (err, result) => {
+    if (err) {callback(err)}
+    ;
+    const rows = <RowDataPacket[]> result;
+    const members: number[] = [];
+    rows.forEach(r=>{
+      members.push(r.pers_id as number);
+    })
+    callback(null, members);
+    console.log("Final Mebmers (in cotroller):", members);
+  });
+}
+
+

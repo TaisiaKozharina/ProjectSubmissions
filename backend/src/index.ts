@@ -16,6 +16,7 @@ import resolveTree from './service/TopicResolver';
 import { IProject } from './models/Project';
 import { ProjectDTO } from './models/ProjectDTO';
 import { IProjectProf } from './models/ProjectProfile';
+import { CollabRequest } from './models/CollabRequest';
 //const router = express.Router();
 
 const saltround = 10;
@@ -234,6 +235,7 @@ app.get("/allprojectprof", async (req: Request, res: Response) => {
       return res.status(500).json({ "message": err.message });
     }
     res.status(200).json({ "profiles": profiles });
+    console.log(profiles);
   })
 });
 
@@ -248,6 +250,53 @@ app.get("/getproject", async (req: Request, res: Response) => {
   })
 });
 
+app.get("/getmembersproject", async (req: Request, res: Response) => {
+  const projID: number = Number(req.query.projectID);
+  console.log(projID);
+  projectModel.findMembersProject(projID, (err: Error, members: number[]) => {
+    if (err) {
+      return res.status(500).json({ "message": err.message });
+    }
+    res.status(200).json({ "members": members });
+  })
+});
+
+app.post("/addcollabrequest", async (req: Request, res: Response) => {
+  const profID: number = Number(req.body.profID);
+  const persID: number = Number(req.body.persID);
+  const message: string = String(req.body.message);
+  collabModel.createCollabRequest(profID, message, persID, (err: Error, crID: number) => {
+    if (err) {
+      return res.status(500).json({ "message": err.message });
+    }
+    res.status(200).json({ "crID": crID });
+  })
+});
+
+
+app.get("/getcollabrequests", async (req: Request, res: Response) => {
+
+  const userID: number = Number(req.query.userID);
+  console.log(userID);
+  collabModel.getCollabRequests(userID, (err: Error, collabs: CollabRequest[]) => {
+    if (err) {
+      return res.status(500).json({ "message": err.message });
+    }
+    res.status(200).json({ "collabs": collabs });
+  })
+});
+
+app.post("/changestatuscollab", async (req: Request, res: Response) => {
+  const collabID: number = Number(req.body.collabID);
+  const decision: number = Number(req.body.decision);
+
+  collabModel.changeStatus(collabID, decision, (err: Error) => {
+    if (err) {
+      return res.status(500).json({ "message": err.message });
+    }
+    res.status(200);
+  })
+});
 
 
 app.get("/", (req: Request, res: Response) => {
