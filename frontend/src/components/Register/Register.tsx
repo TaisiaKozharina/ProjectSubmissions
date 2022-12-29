@@ -100,7 +100,7 @@ export default function Register() {
 
     return (
         <div className="">
-            <h3>Enter information about yourself</h3>
+            <h5 className="section-header">Become part of Sci-Innova community</h5>
 
             <label>First Name:</label>
             <input type='text' onChange={(e) => setFName(e.target.value)} />
@@ -136,14 +136,8 @@ export default function Register() {
             <br />
 
             <button onClick={() => addPerson()}>Register</button>
-{/* 
-            <button onClick={getPersons}>Show Persons</button>
 
-            {persons.map((val, key) => {
-                return <div key={key}>{val.pers_fname}</div>
-            })} */}
-
-            <button onClick={() => getPersons()}>API Call</button>
+            {/* <button onClick={() => getPersons()}>API Call</button> */}
 
         </div>
     );

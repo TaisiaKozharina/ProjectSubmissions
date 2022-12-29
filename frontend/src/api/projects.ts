@@ -102,4 +102,5 @@ export async function getProjectByID(proj_id: number): Promise<IProject> {
     } finally {
         return raw_project
     }
-}
+};
+

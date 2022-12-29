@@ -75,7 +75,7 @@ export default function CollabList() {
     useEffect(initializer, []);
     return (
         <>
-            <h3>Open Collaborations</h3>
+            <h4 className="section-header">Active Collaboration Profiles</h4>
             <div className="proj-list">
                 {Array.from(profiles).map((profile, index) => (
                     <Collab key={index} {...profile}></Collab>

@@ -1,10 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sen&display=swap');
+
 html {
   text-align: center;
-  background-color: rgb(68, 65, 69);
+  background-color: #444145;
   color: antiquewhite;
   font-family: 'Roboto Mono', sans-serif;
   font-size: 20px;
+}
+
+body{
+  margin: 0;
 }
 
 
@@ -21,6 +27,15 @@ button{
   border-radius: 10px;
   color: rgb(68, 65, 69);
   background-color: antiquewhite;
-  border: 2px solid rgb(255, 193, 193);
+  border: 2px solid #ffc1c1;
   cursor: pointer;
+}
+
+.section-header{
+  font-size: 1.5em;
+  font-family: 'Sen', sans-serif;
+  padding: 10px 0;
+  background: rgb(68,65,69);
+  background: linear-gradient(90deg, rgba(68,65,69,1) 0%, rgba(255, 193, 193, 0.751) 50%, rgba(68,65,69,1) 100%);
+  color: #444145;  
 }

@@ -61,7 +61,7 @@ export default function Login() {
 
     return(
         <>
-                <h3>Login page</h3>
+                <h3>Enter your credentials</h3>
                 <label>Email:</label>
                 <input type='text' value={email} onChange={handleEmail}/>
                 <br />
@@ -71,7 +71,7 @@ export default function Login() {
                 <br />
 
                 <button onClick={()=>authorize()}>Login</button>
-                <button onClick={()=>navigate('/profile')}>To profile</button>
+                {/* <button onClick={()=>navigate('/profile')}>To profile</button> */}
         </>
 
     )

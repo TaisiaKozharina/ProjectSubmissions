@@ -3,13 +3,19 @@
 }
 
 img{
-    height: 10vh;
+    height: 50%;
     width: auto;
 }   
 
 .prof-header {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-rows: 1fr 2fr;
+}
+
+.pers-info{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 10vh;
 }
 
 ul{
@@ -200,3 +206,69 @@ ul{
     background-color: #b70736e5;
 }
 
+.appl-card{
+    display: grid;
+    background-color: #362d7a60;
+    border-radius: 20px;
+    border: 3px solid #644880;
+    grid-template-rows: repeat(7 1fr);
+    width: 40vw;
+    transition-duration: 0.2s;
+}
+    
+.appl-card:hover{
+    background-color: #483f9260;
+}
+
+.appl-card>div{
+    border-bottom: 2px dotted #a379cd;
+}
+
+.appl-card>div:last-child{
+    border-bottom: none;
+}
+
+.appl-row{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.appl-row-3{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.appl-row>button{
+    background-color: #490191;
+    color: #ffdddd;
+    text-transform: uppercase;
+    font-style: italic;
+    font-weight: bold;
+    margin: 30px 30px;
+    letter-spacing: 5px;
+}
+
+.appl-item>h4{
+    text-transform: uppercase;
+    font-style: italic;
+}
+
+.stats-table{
+    margin: 0 5%;
+    border: 1px solid #4901916b;
+}
+
+.stats-table>thead{
+    background-color: #64488093;
+}
+.stats-table>thead>tr>td{
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.stats-table>tbody>tr:nth-child(odd){
+    background-color: #80487f63;
+}
+.stats-table>tbody>tr:nth-child(even){
+    background-color: #4849805f;
+}

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ITopic } from "../../../backend/src/models/Topic";
+import { Stats } from "../../../backend/src/models/Stats";
 
 export async function getTopics():Promise<ITopic[]> {
     let topics = {} as ITopic[];
@@ -51,5 +52,25 @@ export async function addTopic(title: string, parent: number | null) {
             console.log('unexpected error: ', error);
             return 'An unexpected error occurred';
         }
+    }
+}
+
+export async function getStats(): Promise<Stats[]> {
+    let stats = {} as Stats[];
+    try {
+        await axios.get('http://localhost:8080/getstats')
+        .then((response)=>{
+            console.log('response status is: ', response.status);
+            stats = Array.from(response.data.stats) as Stats[];
+        })
+
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log('error message: ', error.message);
+          } else {
+            console.log('unexpected error: ', error);
+          }
+    } finally {
+        return stats;
     }
 }
