@@ -241,7 +241,7 @@ const ProfileBody = (user: UserState) => {
     const initializerApplic = () => { getApplications().then(r => setApplications(...applications as [], r)) };
     const initializerStats = () => { getStats().then(r => setStats(...stats as [], r)) };
 
-
+    console.log(requests);
     useEffect(initializerProj, []);
     useEffect(initializerCollab, []);
     useEffect(initializerApplic, []);

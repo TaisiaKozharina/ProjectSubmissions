@@ -22,7 +22,8 @@ export const allProjectProfile = (callback: Function) => {
         `FROM projectsubmissiondb.ProjectProfile pp ` +
         `LEFT JOIN projectsubmissiondb.Project pr on pr.proj_id=pp.proj_id ` +
         `LEFT JOIN projectsubmissiondb.Team t on t.team_id=pr.team_id ` +
-        `LEFT JOIN projectsubmissiondb.ProjectTeam pt on pt.team_id=t.team_id `;
+        `LEFT JOIN projectsubmissiondb.ProjectTeam pt on pt.team_id=t.team_id `+
+        `group by pp.pprof_id `;
     const q2 =
         `SELECT distinct pt.pers_id as pers ` +
         `FROM projectsubmissiondb.projectteam pt ` +
@@ -47,6 +48,8 @@ export const allProjectProfile = (callback: Function) => {
                 leader_id: prof.leader_id,
                 members: prof.membs
             }
+            console.log("PROFILE:");
+            console.log(prof);
             profiles.push(profile);
         });
         callback(null, profiles);

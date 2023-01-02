@@ -46,6 +46,7 @@ export async function getCollabs():Promise<IProjectProf[]> {
 
 export async function applyForCollab(profID: number, message: string, persID: number){
     try {
+        console.log(profID);
         await axios.post('http://localhost:8080/addcollabrequest',
         {
             profID: profID,

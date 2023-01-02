@@ -1,6 +1,7 @@
 import { Router } from "express"
 import { OkPacket, RowDataPacket } from "mysql2"
 import { connection } from ".."
+import { Stats } from "../models/Stats";
 import { ITopic } from "../models/Topic"
 const router:Router = Router();
 
@@ -54,6 +55,35 @@ export const getTopicName = (id: number, callback: Function) => {
       const title:String = row.topic_title
       callback(null, title);
   });
+}
+
+export const statistics = (callback: Function) => {
+  const q = `select t.topic_title, count(p.proj_title) as proj_count, avg(p.proj_funding) as avg_fund, `+
+  `sum(case when p.proj_status = 0 then 1 else 0 end) as count_draft, `+
+  `sum(case when p.proj_status = 1 then 1 else 0 end) as count_indev, `+
+  `sum(case when p.proj_status = 2 then 1 else 0 end) as count_fin `+
+  `from projectsubmissiondb.topic t `+
+  `left join projectsubmissiondb.project p on p.topic_id=t.topic_id `+
+  `group by t.topic_id `
+
+  connection.query(q, (err, result) => {
+      if (err) {callback(err)}
+      const rows = <RowDataPacket[]> result;
+      const stats: Stats[] = [];
+  
+      rows.forEach(row => {
+        const stat:Stats =  {
+          topic_title: row.topic_title,
+          proj_count: row.proj_count,
+          avg_fund: row.avg_fund,
+          count_draft: row.count_draft,
+          count_indev: row.count_indev,
+          count_fin: row.count_fin
+        }
+        stats.push(stat);
+      });
+      callback(null, stats);
+    });
 }
 
 

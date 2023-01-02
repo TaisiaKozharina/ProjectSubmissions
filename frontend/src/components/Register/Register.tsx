@@ -138,7 +138,6 @@ export default function Register() {
             <button onClick={() => addPerson()}>Register</button>
 
             {/* <button onClick={() => getPersons()}>API Call</button> */}
-
         </div>
     );
 }

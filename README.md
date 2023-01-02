@@ -1,4 +1,4 @@
-npm run dev for server
-npm start for front 
-will figure out later
+To run application:
+cd frontend -> npm start
+cd backend -> npm run dev
 

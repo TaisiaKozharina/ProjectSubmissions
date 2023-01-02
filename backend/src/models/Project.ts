@@ -1,3 +1,5 @@
+import { RequestStatus } from "./RequestStatus"
+
 export interface IProject {
 	id?: number,
     title?: string,
@@ -12,5 +14,7 @@ export interface IProject {
     team_id?: number,
     team_name?: string,
     leader_id?: number,
+    applic_id: number | -1,
+    applic_status: RequestStatus | -1,
     createDate: Date
 }

@@ -8,7 +8,14 @@ export const createPerson = (person: IPerson, callback: Function) => {
     const q = "INSERT INTO Person (pers_fname, pers_lname, pers_dob, pers_country, pers_address, pers_email, pers_phone, pers_password, role_id) VALUES(?,?,?,?,?,?,?,?,1)"
     connection.query(
       q,
-      [person.fname, person.lname, person.dob, person.country, person.address, person.email, person.phone, person.password],
+      [person.fname, 
+        person.lname, 
+        person.dob, 
+        person.country, 
+        person.address, 
+        person.email, 
+        person.phone, 
+        person.password],
       (err, result) => {
         if (err) {callback(err)};
         const insertId = (<OkPacket> result).insertId;

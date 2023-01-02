@@ -10,6 +10,7 @@ import * as teamModel from './controller/teamController';
 import * as topicModel from './controller/topicController';
 import * as projectModel from './controller/projectController';
 import * as collabModel from './controller/collaborationsController';
+import * as applicModel from './controller/applicationsController';
 import { Role } from './models/Role';
 import { ITopic } from './models/Topic';
 import resolveTree from './service/TopicResolver';
@@ -17,19 +18,13 @@ import { IProject } from './models/Project';
 import { ProjectDTO } from './models/ProjectDTO';
 import { IProjectProf } from './models/ProjectProfile';
 import { CollabRequest } from './models/CollabRequest';
+import { IApplication } from './models/Application';
+import { RequestStatus } from './models/RequestStatus';
+import { ProjStatus } from './models/ProjStatus';
+import { Stats } from './models/Stats';
 //const router = express.Router();
 
 const saltround = 10;
-interface PersonDto {
-  fname: string,
-  lname: string,
-  dob: string,
-  country: string,
-  address: string,
-  email: string,
-  phone: string,
-  password: string,
-}
 
 const app: Application = express();
 app.use(bodyParser.json());
@@ -310,6 +305,58 @@ app.post("/changestatuscollab", async (req: Request, res: Response) => {
   })
 });
 
+app.post("/submitapplication", async (req: Request, res: Response) => {
+  const projID: number = Number(req.body.projID);
+  console.log("Index.ts recieved projID:",projID);
+  applicModel.submitApplication(projID, (err: Error, applicID: number) => {
+    if (err) {
+      return res.status(500).json({ "message": err.message });
+    }
+    res.status(200).json({ "applicID": applicID });
+  })
+});
+
+app.get("/getapplications", async (req: Request, res: Response) => {
+
+  applicModel.allApplications((err: Error, applications: IApplication[]) => {
+    if (err) {
+      return res.status(500).json({ "message": err.message });
+    }
+    res.status(200).json({ "applications": applications });
+  })
+});
+
+app.get("/getstats", async (req: Request, res: Response) => {
+  topicModel.statistics((err: Error, stats: Stats[]) => {
+    if (err) {
+      return res.status(500).json({ "message": err.message });
+    }
+    res.status(200).json({ "stats": stats });
+  })
+});
+
+app.post("/changestatusapplic", async (req: Request, res: Response) => {
+  const applID: number = Number(req.body.applID);
+  const decision: number = Number(req.body.decision);
+  const projID: number = Number(req.body.projID);
+
+  applicModel.changeStatusApplication(applID, decision, (err: Error) => {
+    if (err) {
+      return res.status(500).json({ "message": err.message });
+    }
+    else{
+      if(decision == RequestStatus.ACCEPTED){
+        projectModel.changeStatusProject(projID, ProjStatus.IN_DEVELOPMENT, (err: Error)=>{
+          if (err) {
+            return res.status(500).json({ "message": err.message });
+          }
+        })
+      }
+    }
+    res.status(200);
+  })
+});
+
 
 app.get("/", (req: Request, res: Response) => {
   res.send({ message: "IT WORKS" })
@@ -320,10 +367,8 @@ const port: string | undefined = process.env.PORT;
 const startServer = async () => {
   try {
     const mysql = require('mysql2/promise');
-    //await mysql.createConnection(process.env.DBConnection);
     await mysql.createConnection({ host: process.env.DBhost, user: process.env.DBuser, password: process.env.DBpassword, database: process.env.DBname });
     console.log("Connected to DB ✅");
-    //If connected to DB, start listening to port
     app.listen(port, () => console.log("Server listening on port ", port));
   }
   catch (err) {

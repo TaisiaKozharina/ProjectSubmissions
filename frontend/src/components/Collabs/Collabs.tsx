@@ -17,8 +17,11 @@ async function applyCollab(profID: number, userID: number){
     document.getElementById('submit-success')!.style.display = "none";
 }
 
-function collabClick(){
+function collabClick(projid: number){
 document.getElementById("collab")!.style.display = "block";
+console.log(document.getElementById('proj-id'));
+(document.getElementById('proj-id') as HTMLInputElement).value = projid.toString();
+console.log((document.getElementById('proj-id') as HTMLInputElement).value);
 }
 function closeClick(){
 document.getElementById("collab")!.style.display = "none";
@@ -27,7 +30,7 @@ document.getElementById("collab")!.style.display = "none";
 function Collab(profile: IProjectProf){
     const user = useSelector((state)=>state) as UserState;
     const [members, setMembers] = useState<number[]>([]);
-    const initializer = () => { getUsersForProj(profile.proj_id).then(r => setMembers(...members as [], r as number[])) };
+    const initializer = () => { getUsersForProj(profile.id).then(r => setMembers(...members as [], r as number[])) };
     useEffect(initializer, []);
     
     return(
@@ -36,7 +39,7 @@ function Collab(profile: IProjectProf){
             <h3 className="collab-header">
                 <small>Project:</small>
                 <br/>
-                {profile.proj_title}
+                {profile.proj_title}: {profile.proj_id}
             </h3>
             {/* <div>{profile.id}</div> */}
             <div>{profile.description}</div>
@@ -47,7 +50,7 @@ function Collab(profile: IProjectProf){
             }
             {!members.includes(user.id) &&
             <div className="collab-footer">
-                <button onClick={()=>collabClick()}>Apply!</button>
+                <button onClick={()=>collabClick(profile.proj_id)}>Apply!</button>
             </div>
             }
         </div>
@@ -60,7 +63,8 @@ function Collab(profile: IProjectProf){
                 <br/>
                 <textarea id='collab-message' name="collab-message"/>
                 <br/>
-                <button onClick={()=>applyCollab(profile.id, user.id)}>Save</button>
+                <input id="proj-id" type="number" style={{display:"none"}} value="-1" readOnly/>
+                <button onClick={()=>applyCollab((document.getElementById('proj-id') as HTMLInputElement).value as unknown as number, user.id)}>Save</button>
                 <br/>
                 <h4 id='submit-success'> ✅ Your request has been sent! Wait for the response! </h4>
             </div>
@@ -73,6 +77,7 @@ export default function CollabList() {
     const [profiles, setProfiles] = useState<IProjectProf[]>([]);
     const initializer = () => { getCollabs().then(r => setProfiles(...profiles as [], r as IProjectProf[])) };
     useEffect(initializer, []);
+    console.log(profiles);
     return (
         <>
             <h4 className="section-header">Active Collaboration Profiles</h4>
